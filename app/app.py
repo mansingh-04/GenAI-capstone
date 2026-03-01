@@ -3,39 +3,7 @@ import os
 import joblib
 import re
 import string
-import nltk
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
-
-# -------------------------
-# Download Required NLTK Data
-# -------------------------
-# nltk.download("punkt")
-# nltk.download("stopwords")
-# nltk.download("wordnet")
-
-# -------------------------
-# Text Preprocessing Setup
-# -------------------------
-stop_words = set(stopwords.words("english"))
-negation_words = {"not", "nor", "never", "no"}
-stop_words = stop_words - negation_words
-
-lemmatizer = WordNetLemmatizer()
-
-def custom_preprocessor(text):
-    text = text.lower()
-    text = re.sub(r"http\S+|www\S+|https\S+", "", text)
-    text = re.sub(r"\d+", "", text)
-    text = text.translate(str.maketrans("", "", string.punctuation))
-    words = word_tokenize(text)
-    words = [
-        lemmatizer.lemmatize(word)
-        for word in words
-        if word not in stop_words and word.isalpha()
-    ]
-    return " ".join(words)
+from collections import Counter
 
 
 @st.cache_resource
@@ -46,15 +14,16 @@ def load_model():
 
 model = load_model()
 
-
 st.set_page_config(
     page_title="News Credibility Detector",
     page_icon="📰",
     layout="centered"
 )
 
-st.title("📰 News Credibility Detection System")
-st.markdown("Analyze whether a news article is **Fake or Real** using an optimized ML model.")
+st.title("📰 Intelligent News Credibility Analysis")
+st.markdown("Detect whether a news article is **Fake or Real** using an optimized Linear SVM model.")
+
+st.markdown("---")
 
 
 option = st.radio(
@@ -73,15 +42,6 @@ elif option == "Upload .txt File":
         news_text = uploaded_file.read().decode("utf-8")
         st.text_area("File Content", news_text, height=200)
 
-
-threshold = st.slider(
-    "Set Decision Threshold (Real Probability)",
-    min_value=0.0,
-    max_value=1.0,
-    value=0.5,
-    step=0.01
-)
-
 st.markdown("---")
 
 
@@ -91,32 +51,61 @@ if st.button("🔍 Analyze News"):
         st.warning("⚠ Please enter or upload some news text.")
     else:
         try:
-            probabilities = model.predict_proba([news_text])[0]
+            prediction = model.predict([news_text])[0]
+            decision_score = model.decision_function([news_text])[0]
 
-            fake_prob = probabilities[0]
-            real_prob = probabilities[1]
+            st.subheader("Prediction Result")
+
+            if prediction == 1:
+                st.success("✅ REAL News")
+            else:
+                st.error("⚠ FAKE News")
 
   
-            if real_prob >= threshold:
-                st.success(f"✅ Prediction: REAL ({real_prob*100:.2f}% confidence)")
+            st.subheader("Model Confidence")
+
+            st.write(f"Decision Margin Score: {decision_score:.4f}")
+
+            confidence_strength = abs(decision_score)
+
+            if confidence_strength > 3:
+                st.info("High Confidence Prediction")
+            elif confidence_strength > 1:
+                st.info("Moderate Confidence Prediction")
             else:
-                st.error(f"⚠ Prediction: FAKE ({fake_prob*100:.2f}% confidence)")
+                st.warning("Low Confidence Prediction (Text may be ambiguous)")
 
 
-            st.subheader("Prediction Confidence")
+            st.markdown("---")
+            st.subheader("Text Analysis")
 
-            st.write(f"Real Probability: {real_prob:.4f}")
-            st.write(f"Fake Probability: {fake_prob:.4f}")
+            words = news_text.split()
+            word_count = len(words)
+            unique_words = len(set(words))
+            char_count = len(news_text)
 
-            # Progress Bar
-            st.progress(float(real_prob))
+            col1, col2, col3 = st.columns(3)
 
-            # Bar Chart
-            st.write("Real vs Fake Probability Distribution")
-            st.bar_chart({
-                "Real": real_prob,
-                "Fake": fake_prob
-            })
+            col1.metric("Word Count", word_count)
+            col2.metric("Unique Words", unique_words)
+            col3.metric("Character Count", char_count)
+
+  
+            word_freq = Counter(words)
+            common_words = dict(word_freq.most_common(10))
+
+            st.write("Top 10 Most Frequent Words")
+            st.bar_chart(common_words)
+
+
+            st.markdown("---")
+            st.subheader("Model Information")
+
+            st.write("• Algorithm: Linear Support Vector Machine (LinearSVC)")
+            st.write("• Feature Extraction: TF-IDF (Unigrams + Bigrams)")
+            st.write("• Max Features: 15,000")
+            st.write("• Hyperparameter Optimization: 3-Fold Cross Validation")
+            st.write("• Evaluation Metric: F1-Score")
 
         except Exception as e:
             st.error(f"Error during prediction: {e}")
