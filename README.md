@@ -38,6 +38,10 @@ The system uses a trained and serialized ML pipeline for fast inference.
 
 ---
 
+## System Architecture and ML Pipeline Diagram
+<img width="1000" height="auto" alt="image" src="https://github.com/user-attachments/assets/abe7d415-8103-42ef-b432-98e1735f8089" />
+
+---
 ## 🖥️ Application Features
 
 ### Input Options
