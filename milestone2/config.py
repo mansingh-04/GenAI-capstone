@@ -31,6 +31,10 @@ HUGGINGFACE_API_KEY = os.getenv("HUGGINGFACE_API_KEY", "")
 HUGGINGFACE_MODEL = os.getenv("HUGGINGFACE_MODEL", "microsoft/DialoGPT-medium")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 
+# External Embedding Selection (Save RAM on Render Free Tier)
+USE_EXTERNAL_EMBEDDINGS = os.getenv("USE_EXTERNAL_EMBEDDINGS", "True").lower() == "true"
+HUGGINGFACE_INFERENCE_URL = f"https://api-inference.huggingface.co/pipeline/feature-extraction/{os.getenv('EMBEDDING_MODEL_NAME', 'sentence-transformers/all-MiniLM-L6-v2')}"
+
 # News API Configuration
 NEWSAPI_KEY = os.getenv("NEWSAPI_KEY", "")
 NEWSAPI_BASE_URL = "https://newsapi.org/v2"

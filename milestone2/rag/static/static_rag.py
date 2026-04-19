@@ -7,8 +7,8 @@ from typing import Dict, Iterable, List, Optional, Sequence
 
 import chromadb
 from chromadb.config import Settings
+import requests
 from logger import logger_rag
-from sentence_transformers import SentenceTransformer
 
 from config import (
     CHROMA_COLLECTION_NAME,
@@ -16,6 +16,9 @@ from config import (
     CHROMA_DISTANCE_METRIC,
     EMBEDDING_MODEL,
     STATIC_RAG_TOP_K,
+    USE_EXTERNAL_EMBEDDINGS,
+    HUGGINGFACE_INFERENCE_URL,
+    HUGGINGFACE_API_KEY,
 )
 from rag.static.liar_dataset_loader import LIARDatasetLoader
 
@@ -36,7 +39,19 @@ class StaticRAG:
         self.top_k = top_k or STATIC_RAG_TOP_K
 
         self.chroma_db_path.mkdir(parents=True, exist_ok=True)
-        self.embedding_model = SentenceTransformer(self.embedding_model_name)
+        
+        # Memory-Efficient Initialization
+        if USE_EXTERNAL_EMBEDDINGS:
+            logger_rag.info("Using External Hugging Face Inference API for embeddings (RAM Optimization)")
+            self.embedding_model = None
+        else:
+            try:
+                from sentence_transformers import SentenceTransformer
+                self.embedding_model = SentenceTransformer(self.embedding_model_name)
+            except ImportError:
+                logger_rag.error("sentence-transformers not found. Please install it or use external embeddings.")
+                self.embedding_model = None
+
         self.client = chromadb.PersistentClient(
             path=str(self.chroma_db_path),
             settings=Settings(anonymized_telemetry=False)
@@ -54,8 +69,35 @@ class StaticRAG:
     def _embed(self, texts: Sequence[str]) -> List[List[float]]:
         if isinstance(texts, str):
             texts = [texts]
-        embeddings = self.embedding_model.encode(list(texts), show_progress_bar=False)
-        return [embedding.tolist() for embedding in embeddings]
+        
+        if USE_EXTERNAL_EMBEDDINGS:
+            if not HUGGINGFACE_API_KEY:
+                logger_rag.warning("HUGGINGFACE_API_KEY not set. External embeddings may fail.")
+            
+            try:
+                response = requests.post(
+                    HUGGINGFACE_INFERENCE_URL,
+                    headers={"Authorization": f"Bearer {HUGGINGFACE_API_KEY}"},
+                    json={"inputs": list(texts), "options": {"wait_for_model": True}},
+                    timeout=20
+                )
+                response.raise_for_status()
+                embeddings = response.json()
+                
+                # Handle different HF output formats (sometimes it returns a list of floats for a single string)
+                if isinstance(embeddings, list) and len(embeddings) > 0 and not isinstance(embeddings[0], list):
+                    embeddings = [embeddings]
+                
+                return embeddings
+            except Exception as e:
+                logger_rag.error(f"External embedding API failed: {e}")
+                # Fallback to zeros or raise? For RAG, zeros will just return no matches
+                return [[0.0] * 384] * len(texts) 
+        else:
+            if self.embedding_model is None:
+                raise RuntimeError("Embedding model not initialized and external embeddings disabled.")
+            embeddings = self.embedding_model.encode(list(texts), show_progress_bar=False)
+            return [embedding.tolist() for embedding in embeddings]
 
     def index_fact_checks(
         self,

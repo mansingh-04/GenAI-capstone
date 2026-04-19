@@ -10,8 +10,7 @@ joblib>=1.3.0
 
 # RAG & Embeddings
 chromadb>=0.4.0
-sentence-transformers>=2.2.0
-hf-transfer>=0.1.4
+# Removed sentence-transformers to save RAM; using external API via logic in RAG classes.
 
 # LLM & Agent
 langchain>=0.1.0

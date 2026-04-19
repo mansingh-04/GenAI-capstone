@@ -18,6 +18,9 @@ from config import (
     CHROMA_COLLECTION_NAME,
     DYNAMIC_RAG_TOP_K,
     NEWSAPI_KEY,
+    USE_EXTERNAL_EMBEDDINGS,
+    HUGGINGFACE_INFERENCE_URL,
+    HUGGINGFACE_API_KEY,
 )
 from rag.dynamic.news_api_client import NewsAPIClient, NewsArticle
 
@@ -42,8 +45,17 @@ class DynamicRAG:
             settings=Settings(anonymized_telemetry=False)
         )
 
-        # Initialize embedding model
-        self.embedding_model = SentenceTransformer(embedding_model)
+        # Memory-Efficient Initialization
+        if USE_EXTERNAL_EMBEDDINGS:
+            logger_rag.info("Using External Hugging Face Inference API for embeddings (RAM Optimization)")
+            self.embedding_model = None
+        else:
+            try:
+                from sentence_transformers import SentenceTransformer
+                self.embedding_model = SentenceTransformer(embedding_model)
+            except ImportError:
+                logger_rag.error("sentence-transformers not found. Please install it or use external embeddings.")
+                self.embedding_model = None
 
         # Initialize NewsAPI client
         self.news_client = NewsAPIClient()
@@ -121,7 +133,25 @@ class DynamicRAG:
             metadatas.append(prepared["metadata"])
 
         # Generate embeddings
-        embeddings = self.embedding_model.encode(texts, show_progress_bar=False)
+        if USE_EXTERNAL_EMBEDDINGS:
+            try:
+                response = requests.post(
+                    HUGGINGFACE_INFERENCE_URL,
+                    headers={"Authorization": f"Bearer {HUGGINGFACE_API_KEY}"},
+                    json={"inputs": texts, "options": {"wait_for_model": True}},
+                    timeout=20
+                )
+                response.raise_for_status()
+                embeddings = response.json()
+                if isinstance(embeddings, list) and len(embeddings) > 0 and not isinstance(embeddings[0], list):
+                    embeddings = [embeddings]
+            except Exception as e:
+                logger_rag.error(f"External embedding API failed: {e}")
+                embeddings = [[0.0] * 384] * len(texts)
+        else:
+            if self.embedding_model is None:
+                raise RuntimeError("Embedding model not initialized and external embeddings disabled.")
+            embeddings = self.embedding_model.encode(texts, show_progress_bar=False).tolist()
 
         # Index in batches to avoid memory issues
         batch_size = 100
@@ -129,7 +159,7 @@ class DynamicRAG:
             end_idx = min(i + batch_size, len(ids))
             self.collection.add(
                 ids=ids[i:end_idx],
-                embeddings=embeddings[i:end_idx].tolist(),
+                embeddings=embeddings[i:end_idx],
                 metadatas=metadatas[i:end_idx],
                 documents=texts[i:end_idx],
             )
@@ -177,11 +207,29 @@ class DynamicRAG:
         logger_rag.info(f"Querying Dynamic RAG: '{query_text}' (top_k={top_k})")
 
         # Generate query embedding
-        query_embedding = self.embedding_model.encode([query_text])[0]
+        if USE_EXTERNAL_EMBEDDINGS:
+            try:
+                response = requests.post(
+                    HUGGINGFACE_INFERENCE_URL,
+                    headers={"Authorization": f"Bearer {HUGGINGFACE_API_KEY}"},
+                    json={"inputs": [query_text], "options": {"wait_for_model": True}},
+                    timeout=20
+                )
+                response.raise_for_status()
+                query_embedding = response.json()
+                if isinstance(query_embedding, list) and not isinstance(query_embedding[0], list):
+                    query_embedding = [query_embedding]
+            except Exception as e:
+                logger_rag.error(f"External embedding API failed: {e}")
+                query_embedding = [[0.0] * 384]
+        else:
+            if self.embedding_model is None:
+                raise RuntimeError("Embedding model not initialized and external embeddings disabled.")
+            query_embedding = [self.embedding_model.encode([query_text])[0].tolist()]
 
         # Query ChromaDB
         results = self.collection.query(
-            query_embeddings=[query_embedding.tolist()],
+            query_embeddings=query_embedding,
             n_results=top_k,
             include=["documents", "metadatas", "distances"],
         )
