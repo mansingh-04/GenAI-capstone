@@ -4,8 +4,8 @@ Exposed functions for content extraction via API and agent
 """
 
 from typing import Dict, Tuple
-from logger import logger_tools
-from tools.content_extractor import extractor
+from milestone2.logger import logger_tools
+from milestone2.tools.content_extractor import extractor
 
 
 def extract_content(

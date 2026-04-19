@@ -2,12 +2,12 @@ import sys
 import os
 
 # Add milestone2 root to path FIRST
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 import streamlit as st
 import requests
 import pandas as pd
-from config import UI_BACKEND_HOST, API_SECRET_KEY
+from milestone2.config import UI_BACKEND_HOST, API_SECRET_KEY
 
 st.set_page_config(page_title="Analysis History", page_icon="📜", layout="wide")
 

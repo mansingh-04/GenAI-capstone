@@ -4,9 +4,9 @@ Uses the pre-trained model to make predictions on news articles
 """
 
 from typing import Dict, Tuple
-from logger import logger_ml
-from ml.model_loader import model_loader
-from constants import LABEL_MAP, LABEL_FAKE, LABEL_REAL
+from milestone2.logger import logger_ml
+from milestone2.ml.model_loader import model_loader
+from milestone2.constants import LABEL_MAP, LABEL_FAKE, LABEL_REAL
 
 
 class NewsArticlePredictor:

@@ -8,9 +8,9 @@ from typing import Dict, Iterable, List, Optional, Sequence
 import chromadb
 from chromadb.config import Settings
 import requests
-from logger import logger_rag
+from milestone2.logger import logger_rag
 
-from config import (
+from milestone2.config import (
     CHROMA_COLLECTION_NAME,
     CHROMA_DB_PATH,
     CHROMA_DISTANCE_METRIC,
@@ -20,7 +20,7 @@ from config import (
     HUGGINGFACE_INFERENCE_URL,
     HUGGINGFACE_API_KEY,
 )
-from rag.static.liar_dataset_loader import LIARDatasetLoader
+from milestone2.rag.static.liar_dataset_loader import LIARDatasetLoader
 
 
 class StaticRAG:

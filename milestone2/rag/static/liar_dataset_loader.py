@@ -8,8 +8,8 @@ from typing import Dict, Iterable, List, Optional
 
 import pandas as pd
 import requests
-from logger import logger_rag
-from config import FACT_CHECK_DATA_PATH
+from milestone2.logger import logger_rag
+from milestone2.config import FACT_CHECK_DATA_PATH
 
 
 class LIARDatasetLoader:

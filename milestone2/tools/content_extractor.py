@@ -12,8 +12,8 @@ from newspaper import Article
 import requests
 from bs4 import BeautifulSoup
 
-from logger import logger_tools
-from constants import ERROR_EXTRACTION_FAILED
+from milestone2.logger import logger_tools
+from milestone2.constants import ERROR_EXTRACTION_FAILED
 
 
 class ContentExtractor:

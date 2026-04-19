@@ -2,11 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-from config import API_HOST, API_PORT, API_DEBUG
-from logger import logger_api
-from api.routes import router
-from api.middleware import TimingMiddleware
-from api.database import init_db
+from milestone2.config import API_HOST, API_PORT, API_DEBUG
+from milestone2.logger import logger_api
+from milestone2.api.routes import router
+from milestone2.api.middleware import TimingMiddleware
+from milestone2.api.database import init_db
 
 # Initialize database
 init_db()

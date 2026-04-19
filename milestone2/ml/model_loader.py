@@ -5,8 +5,8 @@ Loads and caches the pre-trained TF-IDF + Linear SVM model from Milestone 1
 
 import joblib
 from pathlib import Path
-from logger import logger_ml
-from config import ML_MODEL_PATH
+from milestone2.logger import logger_ml
+from milestone2.config import ML_MODEL_PATH
 
 
 class MLModelLoader:

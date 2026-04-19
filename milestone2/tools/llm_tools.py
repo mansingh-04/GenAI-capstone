@@ -3,8 +3,8 @@
 from __future__ import annotations
 from typing import Optional
 
-from logger import logger_tools
-from llm.reasoning_engine import ReasoningEngine
+from milestone2.logger import logger_tools
+from milestone2.llm.reasoning_engine import ReasoningEngine
 
 # Global singleton
 _reasoning_engine: Optional[ReasoningEngine] = None

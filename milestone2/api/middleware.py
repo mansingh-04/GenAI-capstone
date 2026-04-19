@@ -2,8 +2,8 @@ import time
 from fastapi import Request, HTTPException, Security
 from fastapi.security import APIKeyHeader
 from starlette.middleware.base import BaseHTTPMiddleware
-from config import API_SECRET_KEY
-from logger import logger_api
+from milestone2.config import API_SECRET_KEY
+from milestone2.logger import logger_api
 
 # Define that we expect "X-API-Key" in the header
 api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)

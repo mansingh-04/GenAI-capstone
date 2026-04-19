@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 
-from api.schemas import (
+from milestone2.api.schemas import (
     AnalyzeRequest, 
     AnalyzeResponse, 
     PredictRequest, 
@@ -9,10 +9,10 @@ from api.schemas import (
     FeedbackRequest,
     HistoryItem
 )
-from api.middleware import verify_api_key
-from api.database import save_analysis, save_feedback, get_history
-from tools.llm_tools import get_reasoning_engine
-from ml.predictor import NewsArticlePredictor
+from milestone2.api.middleware import verify_api_key
+from milestone2.api.database import save_analysis, save_feedback, get_history
+from milestone2.tools.llm_tools import get_reasoning_engine
+from milestone2.ml.predictor import NewsArticlePredictor
 
 # Initialize Router, secure all endpoints by default
 router = APIRouter(dependencies=[Depends(verify_api_key)])

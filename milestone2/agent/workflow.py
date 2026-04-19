@@ -7,9 +7,9 @@ from langchain_groq import ChatGroq
 from langgraph.prebuilt import create_react_agent
 from langgraph.checkpoint.memory import MemorySaver
 
-from agent.tools import static_rag_tool, dynamic_news_tool, web_search_tool
-from config import GROQ_API_KEY, GROQ_MODEL
-from logger import logger_agent
+from milestone2.agent.tools import static_rag_tool, dynamic_news_tool, web_search_tool
+from milestone2.config import GROQ_API_KEY, GROQ_MODEL
+from milestone2.logger import logger_agent
 
 def create_workflow():
     """Builds and returns the LangGraph agent executor."""

@@ -2,7 +2,7 @@ import sys
 import os
 
 # Add milestone2 root to path FIRST
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
 
 import streamlit as st
 import requests
@@ -10,9 +10,9 @@ import json
 import uuid
 from datetime import datetime
 
-from ui.components import render_credibility_card, render_reasoning_steps, render_evidence_sources, render_legacy_ml_comparison
-from ui.visualizations import render_visualization_dashboard
-from config import UI_BACKEND_HOST, API_SECRET_KEY
+from milestone2.ui.components import render_credibility_card, render_reasoning_steps, render_evidence_sources, render_legacy_ml_comparison
+from milestone2.ui.visualizations import render_visualization_dashboard
+from milestone2.config import UI_BACKEND_HOST, API_SECRET_KEY
 
 st.set_page_config(page_title="Agent Fact-Checker", page_icon="🔍", layout="wide")
 

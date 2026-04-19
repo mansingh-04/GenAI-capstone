@@ -10,8 +10,8 @@ from datetime import datetime, timedelta
 import chromadb
 from chromadb.config import Settings
 
-from logger import logger_rag
-from config import (
+from milestone2.logger import logger_rag
+from milestone2.config import (
     CHROMA_DB_PATH,
     EMBEDDING_MODEL,
     CHROMA_COLLECTION_NAME,
@@ -21,7 +21,7 @@ from config import (
     HUGGINGFACE_INFERENCE_URL,
     HUGGINGFACE_API_KEY,
 )
-from rag.dynamic.news_api_client import NewsAPIClient, NewsArticle
+from milestone2.rag.dynamic.news_api_client import NewsAPIClient, NewsArticle
 
 
 class DynamicRAG:

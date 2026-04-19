@@ -5,7 +5,7 @@ Logging configuration
 import logging
 import sys
 from pathlib import Path
-from config import LOG_LEVEL, LOG_FORMAT, LOGS_DIR
+from milestone2.config import LOG_LEVEL, LOG_FORMAT, LOGS_DIR
 
 
 def setup_logger(name: str, log_file: str = None) -> logging.Logger:

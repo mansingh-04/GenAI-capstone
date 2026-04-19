@@ -6,11 +6,11 @@ from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
 from datetime import datetime
 
-from logger import logger_agent
-from ml.predictor import NewsArticlePredictor
-from rag.static.static_rag import StaticRAG
-from rag.dynamic.dynamic_rag import DynamicRAG
-from tools.content_extraction_tools import extract_content
+from milestone2.logger import logger_agent
+from milestone2.ml.predictor import NewsArticlePredictor
+from milestone2.rag.static.static_rag import StaticRAG
+from milestone2.rag.dynamic.dynamic_rag import DynamicRAG
+from milestone2.tools.content_extraction_tools import extract_content
 import json
 
 @dataclass
@@ -44,7 +44,7 @@ class ReasoningEngine:
         self.llm_client = None
         
         try:
-            from agent.workflow import create_workflow
+            from milestone2.agent.workflow import create_workflow
             self.agent = create_workflow()
         except Exception as e:
             logger_agent.warning(f"Agent failed to load: {e}")
@@ -170,7 +170,7 @@ class ReasoningEngine:
         import json as _j
         from datetime import datetime as _dt
         import re as _re
-        from api.database import save_analysis
+        from milestone2.api.database import save_analysis
 
         def _ev(event_type: str, content):
             return "data: " + _j.dumps({"type": event_type, "content": content}) + "\n\n"

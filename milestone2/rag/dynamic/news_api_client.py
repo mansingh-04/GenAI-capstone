@@ -8,8 +8,8 @@ from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 from urllib.parse import urlencode
 
-import logger
-from config import NEWSAPI_KEY, NEWSAPI_BASE_URL
+from milestone2 import logger
+from milestone2.config import NEWSAPI_KEY, NEWSAPI_BASE_URL
 
 logger_news = logger.setup_logger("news", "news.log")
 

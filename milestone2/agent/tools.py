@@ -4,10 +4,10 @@ import json
 from typing import Dict, Any, List
 from langchain_core.tools import tool
 
-from rag.static.static_rag import StaticRAG
-from rag.dynamic.dynamic_rag import DynamicRAG
-from ml.predictor import NewsArticlePredictor
-from logger import logger_tools
+from milestone2.rag.static.static_rag import StaticRAG
+from milestone2.rag.dynamic.dynamic_rag import DynamicRAG
+from milestone2.ml.predictor import NewsArticlePredictor
+from milestone2.logger import logger_tools
 
 # Instantiate singletons for tools
 _static_rag = StaticRAG()
