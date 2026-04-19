@@ -1,0 +1,53 @@
+# Core Dependencies
+python-dotenv>=1.0.0
+
+# ML & Data Processing
+# Pinned to match serialized Milestone 1 model artifacts.
+scikit-learn==1.6.1
+pandas>=2.0.0
+numpy>=1.24.0
+joblib>=1.3.0
+nltk>=3.8.1
+
+# RAG & Embeddings
+chromadb>=0.4.0
+# Removed sentence-transformers to save RAM; using external API via logic in RAG classes.
+
+# LLM & Agent
+langchain>=0.1.0
+langgraph>=0.0.1
+langchain-groq>=0.1.0
+huggingface-hub>=0.17.0
+
+# News & Web Content
+newspaper3k>=0.0.9
+lxml_html_clean>=0.0.2
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+newsapi>=0.0.6
+duckduckgo-search>=6.0.0
+
+# API & Server
+fastapi>=0.104.0
+uvicorn>=0.24.0
+pydantic>=2.4.0
+gunicorn>=21.2.0
+
+# Frontend
+streamlit>=1.28.0
+plotly>=5.17.0
+
+# Utilities & Logging
+requests>=2.31.0
+tqdm>=4.66.0
+python-dateutil>=2.8.2
+
+# Testing (optional)
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+
+# Development (optional)
+black>=23.10.0
+flake8>=6.1.0
+mypy>=1.6.0
