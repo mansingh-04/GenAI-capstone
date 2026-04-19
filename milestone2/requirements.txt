@@ -2,7 +2,8 @@
 python-dotenv>=1.0.0
 
 # ML & Data Processing
-scikit-learn>=1.3.0
+# Pinned to match serialized Milestone 1 model artifacts.
+scikit-learn==1.6.1
 pandas>=2.0.0
 numpy>=1.24.0
 joblib>=1.3.0
@@ -15,6 +16,7 @@ hf-transfer>=0.1.4
 # LLM & Agent
 langchain>=0.1.0
 langgraph>=0.0.1
+langchain-groq>=0.1.0
 huggingface-hub>=0.17.0
 
 # News & Web Content
@@ -23,6 +25,7 @@ lxml_html_clean>=0.0.2
 beautifulsoup4>=4.12.0
 requests>=2.31.0
 newsapi>=0.0.6
+duckduckgo-search>=6.0.0
 
 # API & Server
 fastapi>=0.104.0

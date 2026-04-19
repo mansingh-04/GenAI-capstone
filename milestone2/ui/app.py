@@ -21,7 +21,6 @@ Instead of relying on hallucinated facts, our Agent behaves as an autonomous inv
 👈 **Select 'Analyze' in the sidebar to enter a claim and begin fact-checking!**
 """)
 
-st.info("Status: Connected to Phase 8 FastAPI Server")
 
 with st.expander("Explanation of the AI Workflow"):
     st.markdown("""

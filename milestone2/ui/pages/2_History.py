@@ -19,18 +19,6 @@ feedback_api_url = f"{UI_BACKEND_HOST}/api/feedback"
 headers = {"X-API-Key": API_SECRET_KEY}
 
 # ── Sidebar Navigation ────────────────────────────────────────────────────
-st.sidebar.header("📱 Navigation")
-
-# Navigation buttons for tab switching
-col_nav1, col_nav2 = st.sidebar.columns(2)
-with col_nav1:
-    if st.button("⬅️ Previous", key="nav_prev_hist", use_container_width=True, disabled=True):
-        pass
-with col_nav2:
-    if st.button("Next ➡️", key="nav_next_hist", use_container_width=True):
-        st.switch_page("pages/1_Analyze.py")
-
-st.sidebar.divider()
 
 # Sidebar Configuration
 st.sidebar.header("History Controls")

@@ -170,6 +170,7 @@ class ReasoningEngine:
         import json as _j
         from datetime import datetime as _dt
         import re as _re
+        from api.database import save_analysis
 
         def _ev(event_type: str, content):
             return "data: " + _j.dumps({"type": event_type, "content": content}) + "\n\n"
@@ -299,6 +300,20 @@ class ReasoningEngine:
                 "dynamic_rag_count": len(dynamic_rag_results),
             }
         }
+        
+        # Save analysis to database for history tracking
+        try:
+            analysis_id = save_analysis(
+                claim=claim,
+                verdict=final_verdict,
+                confidence=confidence_score,
+                full_output=result_payload
+            )
+            result_payload["analysis_id"] = analysis_id
+            logger_agent.info(f"Analysis saved to database: {analysis_id}")
+        except Exception as e:
+            logger_agent.error(f"Failed to save analysis to database: {e}")
+        
         yield _ev("result", result_payload)
 
     def stream_chat(self, prompt: str, thread_id: str):
