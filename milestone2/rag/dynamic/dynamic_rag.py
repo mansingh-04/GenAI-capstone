@@ -9,7 +9,6 @@ from datetime import datetime, timedelta
 
 import chromadb
 from chromadb.config import Settings
-from sentence_transformers import SentenceTransformer
 
 from logger import logger_rag
 from config import (
