@@ -5,20 +5,24 @@ services:
     region: oregon
 
     # Build Configuration
+    # Render now automatically installs root requirements.txt. 
+    # We only need to download NLTK data.
     buildCommand: |
       python -m pip install --upgrade pip setuptools wheel && \
-      python -m pip install -r milestone2/requirements.txt && \
-      python -m pip show nltk && \
       python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('punkt_tab')"
 
     # Start Command
+    # Standard Gunicorn setup for FastAPI in a monorepo.
     startCommand: gunicorn -w 1 -k uvicorn.workers.UvicornWorker milestone2.api.main:app --bind 0.0.0.0:$PORT
 
     # Python Version
     pythonVersion: 3.11
 
-    # Environment Variables (Set these in Render dashboard or in .env file)
+    # Environment Variables
     envVars:
+      - key: PYTHONPATH
+        value: "."
+
       - key: LLM_TYPE
         value: groq
 
@@ -40,27 +44,12 @@ services:
       - key: LOG_LEVEL
         value: INFO
 
-    # Secret Environment Variables (Set these in Render dashboard)
-    # These should be added as "Secret" environment variables in Render Dashboard:
-    # - GROQ_API_KEY
-    # - NEWSAPI_KEY
-    # - API_SECRET_KEY
-    # - HUGGINGFACE_API_KEY (optional)
-
     # Resource Configuration
     plan: standard
     numInstances: 1
 
-    # Health Check (Optional but recommended)
+    # Health Check
     healthCheckPath: /
 
-    # Maximum request size and timeout
-    maxRequestSize: 32mb
-    timeout: 120
-
-    # Auto-deploy from Git
+    # Auto-deploy
     autoDeploy: true
-
-    # Custom domains (optional, add after deployment)
-    # customDomains:
-    #   - api.yourdomain.com
