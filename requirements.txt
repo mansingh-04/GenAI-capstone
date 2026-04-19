@@ -1,0 +1,3 @@
+# Redirecting to milestone2 requirements
+# This file is placed here to satisfy Render's automatic dependency detection.
+-r milestone2/requirements.txt
