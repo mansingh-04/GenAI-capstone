@@ -1,0 +1,48 @@
+# ─── Python ───────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+*.so
+
+# ─── Virtual Environment ──────────────────────
+venv/
+env/
+.venv/
+ENV/
+
+# ─── Environment / Secrets ────────────────────
+.env
+*.env.local
+
+# ─── Logs ─────────────────────────────────────
+logs/
+*.log
+
+# ─── Data & Vector Databases ──────────────────
+# Keep the LIAR dataset folder structure but ignore large binary DB files
+data/chroma_db/
+data/history.db
+data/fact_check/liar_dataset/*.tsv
+
+# ─── ML Model Artifacts ───────────────────────
+# Model .pkl lives in milestone1 - referenced by path, not committed here
+
+# ─── IDE / OS ─────────────────────────────────
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ─── Streamlit ────────────────────────────────
+.streamlit/secrets.toml
+
+# ─── Jupyter ──────────────────────────────────
+.ipynb_checkpoints/
+*.ipynb

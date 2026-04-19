@@ -1,158 +1,84 @@
-# 📰 Intelligent News Credibility Analysis
+# Intelligent News Credibility Analyzer — GenAI Capstone
 
-A deployed Machine Learning system that classifies news articles as **Fake** or **Real** using TF-IDF feature extraction and an optimized Linear Support Vector Machine (LinearSVC).
-
-Built as part of **Milestone 1 – Traditional Machine Learning & NLP**.
+> A two-phase hybrid AI system for real-time news credibility analysis, combining traditional Machine Learning (Milestone 1) with an Agentic LangGraph fact-checking pipeline (Milestone 2).
 
 ---
 
-## 🚀 Live Demo
-
-**Streamlit App:**  
-https://news-credibility.streamlit.app
-
----
-
-## 📌 What This Project Does
-
-This application allows users to:
-
-- Enter a news article manually  
-- Upload a `.txt` file  
-- Receive an instant Fake / Real prediction  
-- View model confidence (decision margin)  
-- Analyze text statistics (word count, unique words, frequency distribution)
-
-The system uses a trained and serialized ML pipeline for fast inference.
-
----
-
-## 🧠 Model Summary
-
-- **Algorithm:** Linear Support Vector Machine (LinearSVC)  
-- **Feature Extraction:** TF-IDF (Unigrams + Bigrams)  
-- **Max Features:** 15,000  
-- **Hyperparameter Tuning:** 3-Fold Cross Validation  
-- **Evaluation Metric:** F1-Score  
-- **Test Accuracy:** ~99%
-
----
-
-## System Architecture and ML Pipeline Diagram
-<img width="1000" height="auto" alt="image" src="https://github.com/user-attachments/assets/abe7d415-8103-42ef-b432-98e1735f8089" />
-
----
-## 🖥️ Application Features
-
-### Input Options
-- Manual text entry  
-- `.txt` file upload  
-
-### Output Display
-- Fake / Real classification  
-- Decision margin score  
-- Confidence interpretation  
-- Word count  
-- Unique word count  
-- Character count  
-- Top 10 most frequent words  
-- Model configuration overview  
-
----
-
-## 🗂 Project Structure
+## Repository Structure
 
 ```
 GenAI-capstone/
-│
-├── app/
-│   └── app.py
-│
-├── data/
-│   ├── raw/
-│   │   └── raw_dataset.md
-│   └── preprocessed/
-│       ├── cleaned_dataset.csv
-│       └── preprocess.py
-│
-├── model/
-│   └── news_credibility_model.pkl
-│
-├── train_model.py
-├── requirements.txt
-└── README.md
+├── milestone1/          ← Traditional ML baseline (LinearSVC + TF-IDF)
+└── milestone2/          ← Agentic AI hub (LangGraph + RAG + live search)
 ```
 
 ---
 
-## 📂 Dataset
+## Milestone 1 — Traditional ML Baseline
 
-Dataset used: **ISOT Fake News Dataset**
+**Goal**: Classify news articles as Fake or Real using linguistic pattern analysis.
 
-Due to GitHub file size limits, raw dataset files are not stored in this repository.
+| Component | Detail |
+|---|---|
+| Model | LinearSVC with TF-IDF feature extraction |
+| Dataset | LIAR dataset (12,791 labeled claims) |
+| Accuracy | ~99% on training distribution |
+| Interface | Streamlit web app (`milestone1/app/app.py`) |
 
-Download links are available in:
-
-```
-data/raw/raw_dataset.md
-```
-
-After downloading:
-
-1. Place files inside `data/raw/`
-2. Run preprocessing
-3. Train the model
+→ See [`milestone1/README.md`](milestone1/README.md) for setup and usage.
 
 ---
 
-## ⚙️ Run Locally
+## Milestone 2 — Agentic Fact-Checking Hub
 
-### 1. Clone Repository
+**Goal**: Verify breaking news claims in real time using a multi-tool LangGraph ReAct agent with streaming UI.
 
+| Component | Detail |
+|---|---|
+| LLM | Llama 3.3-70B via Groq API |
+| Agent Framework | LangGraph (ReAct + MemorySaver) |
+| Live News | NewsAPI real-time fetch + ChromaDB indexing |
+| Web Search | DuckDuckGo for broad corroboration |
+| Static Archive | LIAR dataset via ChromaDB vector search |
+| UI | Streamlit with SSE streaming progress |
+| API | FastAPI with `/analyze_stream` + `/chat_stream` endpoints |
+
+**Key capabilities:**
+- Real-time streaming progress during analysis (no silent waiting)
+- Persistent conversational memory — follow-up chat shares context with initial analysis
+- Smart tool routing — follow-up questions answered from memory at zero API cost
+- Visual credibility dashboard + Milestone 1 ML comparison side-by-side
+- Live API call console in sidebar
+
+→ See [`milestone2/README.md`](milestone2/README.md) for full architecture, setup, and API reference.
+
+---
+
+## Quick Start
+
+### Milestone 1
 ```bash
-git clone https://github.com/your-username/GenAI-capstone.git
-cd GenAI-capstone
-```
-
-### 2. Create Virtual Environment
-
-```bash
-python -m venv venv
-source venv/bin/activate     # Mac/Linux
-venv\Scripts\activate        # Windows
-```
-
-### 3. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Start Application
-
-```bash
+cd milestone1
+pip install -r requirements_m1.txt
 streamlit run app/app.py
 ```
 
----
+### Milestone 2
+```bash
+cd milestone2
+python -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env   # add your GROQ_API_KEY and NEWSAPI_KEY
 
-## ⚠️ Notes
+# Terminal 1
+uvicorn api.main:app --reload
 
-- This milestone focuses strictly on traditional ML techniques.
-- No Generative AI or LLMs are used.
-- Model performance may vary on unseen external news domains.
-
----
-
-## 👥 Team
-
-- Khushi  
-- Manpreet Singh  
-- Avneet Singh  
-- Riya Yadav  
+# Terminal 2
+streamlit run ui/app.py
+```
 
 ---
 
-## 📄 License
+## Tech Stack
 
-Developed for academic purposes (Milestone 1 – Traditional ML & NLP).
+`Python` · `FastAPI` · `Streamlit` · `LangGraph` · `Groq` · `ChromaDB` · `NewsAPI` · `DuckDuckGo Search` · `Scikit-learn` · `Sentence Transformers`
