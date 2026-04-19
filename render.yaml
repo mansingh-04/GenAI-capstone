@@ -6,8 +6,8 @@ services:
 
     # Build Configuration
     buildCommand: |
-      pip install --upgrade pip setuptools wheel
-      pip install -r milestone2/requirements.txt
+      python -m pip install --upgrade pip setuptools wheel
+      python -m pip install -r milestone2/requirements.txt
       python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('punkt_tab')"
 
     # Start Command
