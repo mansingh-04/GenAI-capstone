@@ -93,7 +93,10 @@ SCRAPER_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.
 
 # Validation
 if not ML_MODEL_PATH.exists():
-    raise FileNotFoundError(f"ML Model not found at {ML_MODEL_PATH}")
+    print(
+        f"⚠️  WARNING: ML Model not found at {ML_MODEL_PATH}. "
+        "Baseline predictions will show as 'Unavailable'."
+    )
 
 if LLM_TYPE == "huggingface" and not HUGGINGFACE_API_KEY:
     print(
