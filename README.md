@@ -79,6 +79,10 @@ streamlit run ui/app.py
 
 ---
 
+### System Architecture Diagram
+<img width="1276" height="1496" alt="WhatsApp Image 2026-04-18 at 23 18 18" src="https://github.com/user-attachments/assets/34252f47-e093-4cfa-b271-56a5c78ee6d7" />
+
+
 ## Tech Stack
 
 `Python` · `FastAPI` · `Streamlit` · `LangGraph` · `Groq` · `ChromaDB` · `NewsAPI` · `DuckDuckGo Search` · `Scikit-learn` · `Sentence Transformers`
